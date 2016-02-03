@@ -39,6 +39,11 @@ class Module implements IClassFinder, IStaticConstruct, IBroadcastReceiver {
 
     public static function onCreate() /*void*/ {
         /*
+         * Hook page directory into the IMPHP System variable
+         */
+        Runtime::$SYSTEM["DIR_PAGE"] = Runtime::$SETTINGS->getString("DIR_PAGE_OVERWRITE", str_replace("\\", "/", __DIR__)."/page");
+
+        /*
          * Attach the special cookie collection to the Runtime cookie property
          */
         Runtime::$COOKIE = new Cookies();
@@ -77,16 +82,25 @@ class Module implements IClassFinder, IStaticConstruct, IBroadcastReceiver {
      */
     /*Overwrite: IClassFinder*/
     public static function onFindClass(string $classname) /*string*/ {
-        /*
-         * Create a valid file path with our custom location
-         */
-        $file = dirname(__FILE__)."/".str_replace("\\", "/", $classname).".php";
+        if (($pos = strpos($classname, "\\")) !== false) {
+            $type = substr($classname, 0, $pos);
 
-        if (is_file($file)) {
-            /*
-             * Return the file to Runtime
-             */
-            return $file;
+            if ($type == "page") {
+                /*
+                 * Create a valid file path with our custom location
+                 */
+                $file = Runtime::$SYSTEM["DIR_PAGE"]."/".str_replace("\\", "/", substr($classname, $pos+1)).".php";
+
+            } else {
+                $file = __DIR__."/".str_replace("\\", "/", $classname).".php";
+            }
+
+            if (is_file($file)) {
+                /*
+                 * Return the file to Runtime
+                 */
+                return $file;
+            }
         }
 
         /*
