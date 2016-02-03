@@ -30,8 +30,8 @@ class Handler extends BaseHandler {
 
     /** @inheritdoc */
     /*Overwrite: BaseHandler*/
-    public function __construct(string $sessId) {
-        parent::__construct($sessId);
+    public function __construct(string $sessId, int $maxlifetime) {
+        parent::__construct($sessId, $maxlifetime);
 
         $path = session_save_path();
         $this->mDir = rtrim($path, "\\/").DIRECTORY_SEPARATOR;
