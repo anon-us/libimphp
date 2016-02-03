@@ -1,0 +1,292 @@
+##
+#
+# CONFIGURATION OPTIONS FOR LIBRARIES
+#
+##
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Cache
+ * _______________________________________________________________________
+
+    /*
+     * Driver to be used with the Cache library.
+     *
+     *      * 'file': Uses a file caching system
+     *      * 'memcached': Uses the memcached extension (Note that it is memcache(d))
+     */
+    string "CACHE_DRIVER" => "file"
+
+    /*
+     * The protocol to use with the driver, this is driver specific
+     *
+     *      * 'file': Should be a path to a writable directory
+     *      * 'memcached': Uses '[host[:port][#connId]]' where host can be domain or path to a socket. Default is '127.0.0.1:11211'
+     */
+    string "CACHE_PROTOCOL" => ""
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Router
+ * _______________________________________________________________________
+
+    /*
+     * Routing information.
+     * Keys should contain the request that should be matched against,
+     * and the value is the controller to launch.
+     */
+    array <string,string> "ROUTER" => []
+
+    /*
+     * Allows you to disable the router.
+     * If the router is not to be used, for example if you use something else for
+     * launching some sort of page file, you can set this to false to avoid the
+     * libimphp router starting and using resources.
+     */
+    boolean "ROUTER_ENABLED" => true
+
+    /*
+     * This will register a special page with the router.
+     * these cannot be accessed from the uri by the client,
+     * it can only be manually redirected to.
+     *
+     * The Router already redirects 404 responses to "ROUTER_404" if this
+     * is set.
+     */
+    string "ROUTER_[0-9]+" => null
+
+    /*
+     * The routing resolver driver to use. Available and default is `imphp`
+     */
+    string "ROUTER_DRIVER" => "imphp"
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Paths
+ * _______________________________________________________________________
+
+     /*
+      * If set to true, the Path library will generate links intended for
+      * URL Rewrite. Otherwise the location string will be added to the
+      * '$' querystring
+      *
+      * Note that you must enable rewriting in your server settings in order
+      * for this feature to work.
+      */
+     boolean "PATH_URL_REWRITE" => false
+
+     /*
+      * This is added as an ?id tag to file paths used for content loading like
+      * css files, javascript files, images etc. It ensures that old caches can be cleared
+      * from clients. Simply increase the number and it will make a forced reload of all cached content.
+      * If you set this to '0' it will disable the tags (they are not added).
+      * If you set this to '-1' it will enable debug mode and generate random id's on each request.
+      */
+     integer "PATH_ID_TAG" => -1
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Database
+ * _______________________________________________________________________
+
+    /*
+     * Database connection string that is used by the shared default connection.
+     * The protocol differs from each database driver.
+     *
+     * MySQLi
+     *      - The builtin mysqli driver uses the following protocol
+     *      -> "mysqli://[user[:password]@]host[/path][:port]#database"
+     *
+     *      - The builtin swlite3 driver uses the following protocol
+     *      -> "sqlite3://[path]/database.db"
+     */
+    string "DATABASE" => ""
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Security Configuration
+ * _______________________________________________________________________
+
+    /*
+     * Global setting for using specific ssl option whenever
+     * a request is made via a valid https. For example sessions will use
+     * a more secure ssl cookie for the session id whenever HTTPS is used.
+     * Otherwise the same session id is used for both connections.
+     */
+    boolean "SECURITY_SSL" => false
+
+    /*
+     * Global security password.
+     * This is among other things used for cookie encryption if you enable
+     * encryption of session cookie, or encryption of session data if
+     * this is enabled.
+     *
+     * Use Crypt::password() to create a proper random password,
+     * or any other known password generators.
+     *
+     * Do NOT use a password easily typed and remembered by humans.
+     * This is not a password that you will ever need to type.
+     * The more random it is, the better.
+     *
+     * Also, this is not, and does not need to be, an encryption key.
+     * Real encryption keys are auto generated using this password whenever
+     * such is needed like when encrypting data. This password is never used
+     * directly on encryptions.
+     */
+    string "SECURITY_PASSWD" => ""
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Auth/User
+ * _______________________________________________________________________
+
+    /*
+     * Root is a built-in user that bypasses all security checks.
+     * No mater what group something is locked to, root will always
+     * return as authorized when checking against the Auth library.
+     *
+     * If password is empty or NULL, root is considered disabled and
+     * it will not be possible to use or login using this account.
+     *
+     * Use PHP's 'password_hash' to hash your password
+     */
+    boolean "AUTH_ROOT_PASSWD" => ""
+
+    /*
+     * Algorithm used by PHP's 'password_hash' function.
+     * The Auth library will re-generate passwords when
+     * this option changes. This does not apply
+     * to 'AUTH_ROOT_PASSWD' however. It should be manually changed.
+     */
+    int "AUTH_VERIFY_ALGO" => PASSWORD_DEFAULT
+
+    /*
+     * Options used by PHP's 'password_hash' function.
+     * The Auth library will re-generate passwords when
+     * these options changes. This does not apply
+     * to 'AUTH_ROOT_PASSWD' however. It should be manually changed.
+     */
+    array "AUTH_VERIFY_OPTIONS" => []
+
+    /*
+     * The driver to use by default.
+     * Available and default are 'imphp'
+     */
+    string "AUTH_DRIVER" => "imphp"
+
+    /*
+     * Allows login via cli when executing from a terminal.
+     *
+     *  * `php index.php --passwd mypassword --user root`
+     */
+    boolean "AUTH_ALLOW_CLI" => false
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Sessions
+ * _______________________________________________________________________
+
+    /*
+     * If enable, all session data will be encrypted
+     * while stored in the database.
+     *
+     * Note: 'SECURITY_PASSWD' needs to be set
+     */
+    boolean "SESSION_ENCRYPT_DATA" => false
+
+    /*
+     * If enabled, the session id cookie will be encrypted
+     *
+     * Note: 'SECURITY_PASSWD' needs to be set
+     */
+    boolean "SESSION_ENCRYPT_COOKIE" => false
+
+    /*
+     * Inactive time is seconds before the session expires
+     */
+    int "SESSION_EXPIRES" => 24*60*60
+
+    /*
+     * Driver/Handler used for sessions.
+     * Builtin are 'file', 'cache' and 'database', the first being default
+     *
+     * The 'cache' driver uses the Cache library and it's default settings
+     * to store session data.
+     */
+    string "SESSION_DRIVER" => "file"
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Cookies
+ * _______________________________________________________________________
+
+    /*
+     * Specify the default domain used by cookies.
+     * If not set, domain will be generated. It will not be left empty.
+     */
+    string "COOKIE_DOMAIN" => ""
+
+    /*
+     * Specify the default path used by cookies.
+     * If not set, '/' will be use.
+     */
+    string "COOKIE_PATH" => "/"
+
+    /*
+     * Prefix that will be added to cookie names before hashing
+     */
+    string "COOKIE_PREFIX" => "IMPHP_"
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Crypt
+ * _______________________________________________________________________
+
+    /*
+     * Default driver used by the Crypt library
+     * By default 'dummy' is used while you can select 'openssl' or 'mcrypt'
+     */
+    string "CRYPT_DRIVER" => "dummy"
+
+    /*
+     * Cipher/module used by the default Crypt driver 'CRYPT_DRIVER'
+     *
+     * MCrpyt:
+     *      - Uses 'rijndael-256' if this is NULL
+     *
+     * OpenSSL:
+     *      - Uses 'AES-256' (Which in turn uses rijndael as the cipher) if this is NULL
+     *
+     * Dummy
+     *      - Does not actually encrypt anything
+     */
+    string "CRYPT_CIPHER" => "rijndael-256" || "AES-256"
+
+    /*
+     * Hash used by the default Crypt driver 'CRYPT_DRIVER'
+     * If this is NULL, then 'sha512' is used.
+     */
+    string "CRYPT_HASH" => "sha512"
+
+    /*
+     * Block mode used by the default Crypt driver 'CRYPT_DRIVER'
+     * If this is NULL, then 'cbc' is used.
+     */
+    string "CRYPT_MODE" => "cbc"
+
+    /*
+     * Use 2-step authentication on the default Crypt driver 'CRYPT_DRIVER'
+     * This defaults to 'FALSE' and you should rethink turning it on.
+     * Depending on what the need is, it might not be important enough
+     * considering the additional load this will bring when decrypting.
+     */
+    boolean "CRYPT_TWO_STEP_AUTH" => false

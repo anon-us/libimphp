@@ -1,0 +1,52 @@
+##
+#
+# TABLE STRUCTURE
+#
+##
+
+If you use some of the database for some of the libraries, you should include a few tables depending on driver and library.
+The datatypes below is not real types of specific databases, it's just a representation to indicate what content will be added to the columns.
+Use appropriate data types specific for your database that matches this content. For example 'text' should not be a simple VARCHAR in mysql, 'string' can be.
+
+Also tings like 'cName' in 'users' would be best if it was case-insensitive so that you don't have to match username case when entering usernames in a
+login form. The same goes for 'cKey' in 'cache' and maybe 'cIdentifier' in 'groups'.
+
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Session
+ * _______________________________________________________________________
+    Table 'sessions' {
+        'cId'           =   int, primary, autoincrement
+        'cSessId'       =   string, unique, not null
+        'cData'         =   text, not null
+        'cTime'         =   int, not null
+    }
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Cache
+ * _______________________________________________________________________
+    Table 'cache' {
+        'cKey'          =   string, unique, not null
+        'cData'         =   text, not null
+        'cExpires'      =   int, not null
+    }
+
+/* =======================================================================
+ * -----------------------------------------------------------------------
+ *      Auth
+ * _______________________________________________________________________
+     Table 'users' {
+        'cId'           =   int, primary, autoincrement
+        'cName'         =   string, unique, not null
+        'cPassword'     =   string, not null
+     }
+     Table 'groups' {
+        'cId'           =   int, primary, autoincrement
+        'cIdentifier'   =   string, unique, not null
+     }
+     Table 'usergroups' {
+        'cUserId'       =   int, not null
+        'cGroupId'      =   int, not null
+     }
