@@ -328,7 +328,7 @@ class Path {
      */
     public static function fileLink($path, $from=null, string $baseUrl=null, bool $noTag=false): string {
         $path = static::toAbsolute($path, $from);
-        $baseUrl = $baseUrl ?? Runtime::$SYSTEM->getString("URI_BASE", "");
+        $baseUrl = $baseUrl ?? Runtime::$SETTINGS["URI_BASE_OVERWRITE"] ?? Runtime::$SYSTEM->getString("URI_BASE", "");
         $root = rtrim(substr(str_replace(["\\", "//"], "/", Runtime::$SYSTEM["DIR_ROOT"]), strpos(Runtime::$SYSTEM["DIR_ROOT"], "/")), "/");
         $rootLength = strlen($root);
 
