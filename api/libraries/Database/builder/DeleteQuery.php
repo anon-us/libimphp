@@ -25,14 +25,25 @@ class DeleteQuery extends QueryExecuter {
 
     use QueryBuilder_Conditional;
     use QueryBuilder_Join;
-    use QueryBuilder_Table_Extended;
+    use QueryBuilder_Table_Extended {
+        prepareTableSQL as prepareTableSQLParent;
+    }
 
     protected /*bool*/ $mIsCompiled = false;
     protected /*Connection*/ $mConnection = null;
+    protected /*string*/ $mAlias = null;
 
     public function __construct(Connection $connection, string $table, string $alias=null) {
         $this->table($table, $alias);
         $this->mConnection = $connection;
+    }
+
+    protected function prepareTableSQL(string $table, string $alias=null): string {
+        if ($this->mAlias == null) {
+            $this->mAlias = $alias === null ? "" : $alias;
+        }
+
+        return $this->prepareTableSQLParent($table, $alias);
     }
 
     protected function getConnection(): Connection {
@@ -46,7 +57,7 @@ class DeleteQuery extends QueryExecuter {
     public function compile() /*this*/ {
         $this->mCompiledTypes = "";
         $this->mCompiledData = [];
-        $this->mCompiledSQL = "DELETE ".$this->mMasterTbl." FROM";
+        $this->mCompiledSQL = "DELETE".(!empty($this->mAlias) ? " ".$this->mAlias." " : " ")."FROM";
 
         if ($this->countSegments("table") > 0) {
             $this->compileSegments("table");
