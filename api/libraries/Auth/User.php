@@ -129,4 +129,18 @@ abstract class User {
          */
         return 0;
     }
+
+    /**
+     * Get the current user id
+     *
+     * @api
+     */
+    abstract public function getUserId(): int;
+
+    /**
+     * Get the current user name
+     *
+     * @api
+     */
+    abstract public function getUserName(): string;
 }

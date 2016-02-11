@@ -160,4 +160,32 @@ class Auth implements IStaticConstruct {
 
         throw new ConnectionException("Attempt to make call on dead resource");
     }
+
+    /**
+     * @api
+     * @see api\libraries\Auth\User#getUserId()
+     */
+    public static function getUserId(): int {
+        $instance = static::getInstance();
+
+        if ($instance !== null) {
+            return $instance->getUserId();
+        }
+
+        throw new ConnectionException("Attempt to make call on dead resource");
+    }
+
+    /**
+     * @api
+     * @see api\libraries\Auth\User#getUserName()
+     */
+    public static function getUserName(): string {
+        $instance = static::getInstance();
+
+        if ($instance !== null) {
+            return $instance->getUserName();
+        }
+
+        throw new ConnectionException("Attempt to make call on dead resource");
+    }
 }

@@ -225,4 +225,16 @@ class User extends BaseUser {
 
         return $this->mUserGroups;
     }
+
+    /** @inheritdoc */
+    /*Overwrite: BaseUser*/
+    public function getUserId(): int {
+        return $this->mUserId;
+    }
+
+    /** @inheritdoc */
+    /*Overwrite: BaseUser*/
+    public function getUserName(): string {
+        return $this->mUserName;
+    }
 }
