@@ -47,18 +47,24 @@ abstract class Result {
     /**
      * @api
      *
+     * @param bool $close=false
+     *      If true, return the curren row and destroy the result
+     *
      * @return Bundle
      *      Fetch the next row as a Bundle
      */
-    public abstract function fetch() /*array*/;
+    public abstract function fetch(bool $close=false) /*array*/;
 
     /**
      * @api
      *
+     * @param bool $close=false
+     *      If true, return the curren row and destroy the result
+     *
      * @return array<mixed>
      *      Fetch the next row as an indexed array
      */
-	public abstract function fetchAssoc() /*array*/;
+	public abstract function fetchAssoc(bool $close=false) /*array*/;
 
     /**
      * Moves the internal row pointer to a requested position

@@ -67,8 +67,12 @@ class Result extends BaseResult {
 
     /** @inheritdoc */
     /*Overwrite: BaseResult*/
-    public function fetch() /*array*/ {
+    public function fetch(bool $close=false) /*array*/ {
         $row = $this->mResult->fetcharray(SQLITE3_NUM);
+
+        if ($close) {
+            $this->destroy();
+        }
 
         if (is_array($row)) {
             return $row;
@@ -79,8 +83,12 @@ class Result extends BaseResult {
 
     /** @inheritdoc */
     /*Overwrite: BaseResult*/
-    public function fetchAssoc() /*array*/ {
+    public function fetchAssoc(bool $close=false) /*array*/ {
         $row = $this->mResult->fetcharray(SQLITE3_ASSOC);
+
+        if ($close) {
+            $this->destroy();
+        }
 
         if (is_array($row)) {
             return $row;
