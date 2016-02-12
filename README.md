@@ -19,6 +19,7 @@ The IMPHP project is just a raw module loader with a few collection classes. The
 * [Crypt](https://github.com/IMPHP/libimphp/tree/master/doc/Crypt.md)
 * [Router](https://github.com/IMPHP/libimphp/tree/master/doc/Router.md)
 * [Path](https://github.com/IMPHP/libimphp/tree/master/doc/Path.md)
+* [FileImport](https://github.com/IMPHP/libimphp/tree/master/doc/FileImport.md)
 * [Locks](https://github.com/IMPHP/libimphp/tree/master/doc/Locks.md)
 * Database
     * [Part 1](https://github.com/IMPHP/libimphp/tree/master/doc/Database.part1.md)
