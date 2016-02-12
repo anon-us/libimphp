@@ -65,7 +65,7 @@ class Router {
         $instance = static::getInstance();
 
         if ($instance !== null) {
-    		return $instance->getController($request);
+    		return $instance->getController();
         }
 
         throw new ConnectionException("Attempt to make call on dead resource");
