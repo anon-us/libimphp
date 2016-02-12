@@ -59,13 +59,18 @@ abstract class Resolver {
      * @ignore
      */
     public function onPrepareOutput() {
-        $controller = $this->getController();
+        if (!Runtime::hasLock("router")) {
+            $controller = $this->getController();
 
-        if ($controller !== null) {
-            echo $controller->imOnPrepareOutput(ob_get_clean());
+            if ($controller !== null) {
+                echo $controller->imOnPrepareOutput(ob_get_clean());
+
+            } else {
+                echo ob_get_clean();
+            }
 
         } else {
-            echo ob_get_clean();
+            Runtime::addLockCallback("router", [$this, "onPrepareOutput"]);
         }
     }
 
